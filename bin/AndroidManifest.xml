@@ -1,0 +1,1409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.lge.email"
+    android:versionCode="66002300"
+    android:versionName="6.60.23" >
+
+    <!-- android:anyDensity is true , if want nodpi(prescale) image draw -->
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="false" />
+
+    <!-- Grant permission to system apps to access provider (see provider below) -->
+    <permission
+        android:name="com.lge.email.permission.ACCESS_PROVIDER"
+        android:description="@string/sp_permission_access_provider_desc_NORMAL"
+        android:label="@string/sp_permission_access_provider_label_NORMAL"
+        android:protectionLevel="signatureOrSystem" />
+    <permission
+        android:name="com.lge.email.permission.READ_EMAIL_ACCOUNT_INFO"
+        android:label="@string/sp_permission_access_provider_label_NORMAL"
+        android:protectionLevel="dangerous" />
+
+    <uses-sdk android:minSdkVersion="21" />
+
+    <application
+        android:name=".EmailMainApp"
+        android:debuggable="false"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/email"
+        android:label="@string/application_name_common"
+        android:supportsRtl="true" >
+        <meta-data
+            android:name="com.lge.theme"
+            android:value="Theme_LGE_White" />
+        <meta-data
+            android:name="com.lge.support.SPLIT_WINDOW"
+            android:value="true" />
+        <!-- [shilpa.nc][01012015 EMAIL-10289 Exclude EMail Widget from Smart Bulletin -->
+        <meta-data
+            android:name="com.lge.launcher2.smartbulletin.EXCLUDE_WIDGET"
+            android:value="true" />
+        <!-- backup support -->
+        <meta-data
+            android:name="LGBackup.Support"
+            android:value="true" />
+        <meta-data
+            android:name="LGBackup.DefaultBackupSize"
+            android:value="0" />
+        <meta-data
+            android:name="LGBackup.SizeUpdate"
+            android:value="content://com.lge.email.BackupSizeUpdateProvider" />
+        <!-- backup support -->
+
+
+        <!-- [jeehun.seo]20130607 split mode [start] -->
+        <uses-library
+            android:name="com.lge.zdi.splitwindow"
+            android:required="false" />
+        <!-- [jeehun.seo]20130607 split mode [end] -->
+
+
+        <!--
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // //
+  // // (LGEmail 3.0) listing here !!!  [START]
+  // //
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        -->
+
+        <activity
+            android:name=".ui.settings.AuthFailDialogEmptyActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Dialog"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="com.lge.email.action.AUTHFAIL_EMPTY_DIALOG" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- jh.yang Settings [start] -->
+        <activity
+            android:name=".ui.setupwizard.hidden.HiddenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="com.lge.email.action.HIDDEN_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.settings.MailSettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/strMainMenu7"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="com.lge.email.action.MAIL_SETTINGS_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- [Split_Settings][START] -->
+        <activity
+            android:name=".ui.settings.EmptyMailSettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/strMainMenu7"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="com.lge.email.action.EMPTY_MAIL_SETTINGS_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- [Split_Settings][END] -->
+
+        <activity
+            android:name=".ui.settings.RemoveAccountSettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/strMainMenu7"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="com.lge.email.action.REMOVE_ACCOUNT_SETTINGS_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- jh.yang Settings [end] -->
+
+
+        <!-- android:name=".ui.setupwizard.Welcome" android:theme="@style/no_preview_activity" -->
+        <activity
+            android:name=".ui.setupwizard.QSlideWelcome"
+            android:theme="@style/no_preview_activity" >
+            <intent-filter>
+                <action android:name="com.lge.email.action.noprev.MAILBOX_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.lge.intent.action.EMAIL_SETUP_WIZARD_ACCOUNT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.setupwizard.Welcome" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.lge.email.action.NEW_ACCOUNT" />
+                <action android:name="com.lge.email.action.MAILBOX_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- [kyozzang.kim] 20130403 floatable_email [start] -->
+        <activity-alias
+            android:name="QSlideIcon"
+            android:enabled="@bool/ui40_enabled"
+            android:icon="@drawable/email"
+            android:targetActivity=".ui.setupwizard.QSlideWelcome" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="com.lge.intent.category.QSLIDE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="cleartask"
+                android:value="true" />
+            <meta-data
+                android:name="order"
+                android:value="500" />
+            <meta-data
+                android:name="min_version"
+                android:value="2.5" />
+        </activity-alias>
+
+        <!-- [kyozzang.kim] 20130403 floatable_email [end] -->
+        <!-- [jeehun.seo] 20130719 2nd fatal error exception code [start] -->
+        <activity
+            android:name=".ui.easfatal.FatalErrorDialogActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <!-- [jeehun.seo] 20130719 2nd fatal error exception code [end] -->
+
+
+        <!-- [jeehun.seo] 20131112 db corruption exception code [start] -->
+        <activity
+            android:name=".ui.activity.DbCorruptionView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <!-- [jeehun.seo] 20131112 db corruption exception code [end] -->
+        <activity
+            android:name=".ui.setupwizard.EASSetupActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/account_settings_servers"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.LoginActivityComp"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.SelectAccountTypeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_new_account_select_account_type_NORMAL" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.IncomingServerSetupActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/account_setup_incoming_title" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.OutgoingServerSetupActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/account_setup_outgoing_title" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.AccountNamesSetupActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_setup_completed_NORMAL" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.AccountNamesSetupActivityForVZWSetupWizard"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_setup_completed_NORMAL" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.MdmProgressActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_new_account_server_title_NORMAL" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.ProviderListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_register_account_NORMAL" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.ProviderListVZWActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_register_account_NORMAL" >
+        </activity>
+        <activity android:name=".ui.certificate.EasCertificateRequestor" >
+            <intent-filter>
+                <action android:name="com.lge.email.REQUEST_CERT" />
+
+                <data
+                    android:path="/certrequest"
+                    android:scheme="eas" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.SyncOptionsEasActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/txt_account_setting" >
+        </activity>
+        <activity
+            android:name=".ui.setupwizard.att.Ready2GoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/account_new_connect_server_title" >
+        </activity>
+
+        <!-- SetupWizard end -->
+
+
+        <!-- Backup start -->
+        <activity
+            android:name=".ui.backup.RestoreBackupAccountList"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_restore_email_title_NORMAL" >
+        </activity>
+        <activity
+            android:name=".ui.backup.GlobalBackupAgent"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_restore_email_title_NORMAL" >
+        </activity>
+        <!-- Backup end -->
+
+        <activity android:name=".ui.mailview.toDelete.EmailTempActivity" >
+        </activity>
+        <!-- kyozzang.kim -->
+        <activity
+            android:name="com.lge.email.ui.mailbox.MailboxActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/mailbox_list_title"
+            android:theme="@style/no_preview_activity"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+
+        <!-- [iamsanghyun.lee] New search scenario [Start] -->
+        <activity
+            android:name="com.lge.email.ui.mailbox.MailSearchPeriodActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_title_search_period_NORMAL"
+            android:theme="@style/Transparent" >
+        </activity>
+        <!-- [iamsanghyun.lee] New search scenario [End] -->
+
+
+        <!-- kyozzang.kim -->
+        <activity android:name=".ui.activity.view.ViewPagerTestActivity" >
+        </activity>
+        <activity
+            android:name=".ui.activity.FolderCreateActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+
+        <service android:name=".engine.event.mgr.ProtocolStarterService" >
+        </service>
+        <!-- SJH_E -->
+
+
+        <!-- KMS_S -->
+        <activity
+            android:name=".customview.cursoradapter.test.MailExpandableListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name=".customview.cursoradapter.test.MailListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <!-- KMS_E -->
+
+        <activity
+            android:name=".ui.activity.ConfirmEncryption"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="com.lge.email.action.CONFIRM_ENCRYPTION_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.VerificationAccountActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name=".ui.activity.SIMChangeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+
+            <!-- [hee.yoon] 20131113 check sim changed in EmailWidget -->
+            <intent-filter>
+                <action android:name="com.lge.email.intent.action.WIDGET_SIM_REQUEST_OK" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lge.email.ui.mailwrite.MailWriteActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|keyboard|navigation|uiMode"
+            android:label="@string/application_name_common_mailwrite"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.SENDTO" />
+
+                <data android:scheme="mailto" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+            <intent-filter android:label="@string/application_name_common_mailwrite" >
+                <action android:name="android.intent.action.SEND" />
+
+                <data android:mimeType="*/*" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter android:label="@string/application_name_common_mailwrite" >
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+
+                <data android:mimeType="*/*" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.lge.email.intent.action.MAIL_REPLY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter android:label="@string/application_name_common_mailwrite" >
+                <action android:name="com.lge.email.intent.action.SEND_BY_CALENDAR" />
+
+                <data android:mimeType="*/*" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/x-vCalendar" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.lge.email.intent.action.MEETING_RESPONSE_FROM_CALENDAR" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <!-- EMAIL-6181 : Support NFC Tag Reading : START -->
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="mailto" />
+            </intent-filter>
+            <!-- EMAIL-6181 : Support NFC Tag Reading : END -->
+        </activity>
+        <!-- LGE_CHANGE_LARGE_FILE_TRASNFER_BEGIN -->
+        <activity
+            android:name=".ui.largefile.DownloadActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/downloads_for_wifi"
+            android:theme="@style/custom_actionbar_theme"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name="com.lge.to.be.deleted.DownloadNotificationDialog"
+            android:configChanges="orientation|screenSize" >
+        </activity>
+
+        <!-- LGE_CHANGE_SMIME_BEGIN -->
+        <!-- LGE_CHANGE_SMIME_TRUSTED_CERT -->
+        <!--
+        <activity
+            android:name="com.lge.email.smime.io.TrustedCertActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        -->
+        <activity
+            android:name="com.lge.email.smime.io.SmimeCreateCertificateActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name="com.lge.email.smime.io.SmimeKeyChainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="true"
+            android:theme="@style/Transparent" >
+            <intent-filter>
+                <action android:name="com.lge.email.CHOOSE_PRIVATE_KEY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- LGE_CHANGE_SMIME_END -->
+
+        <activity
+            android:name="com.lge.email.ui.snc.AccountSecurity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="true" >
+        </activity>
+
+        <!-- ShortCut -->
+        <!--
+     [30/05/2013][basanta.behera@lge.com][Start] TD:340501
+      Email Widget (1x1)  pop-up issue fixed
+      [EMAIL-2959][27/09/2013][gajanand.chalkapure@lge.com] Home screen
+      Widget at the bottom of the screen disappear fix
+        -->
+        <activity
+            android:name=".ui.activity.AccountShortCutList"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Dialog" />
+
+        <activity-alias
+            android:name=".ui.activity.EmailAccountShortCut"
+            android:icon="@drawable/email_account"
+            android:label="@string/sp_shortcut_title_NORMAL"
+            android:targetActivity=".ui.activity.AccountShortCutList" >
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
+        <receiver android:name=".adapter.event.receiver.EmailEngineReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.WidgetRefreshReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.lge.email.intent.action.WIDGET_REFRESH_START" />
+                <action android:name="com.lge.email.intent.action.WIDGET_REFRESH_END" />
+            </intent-filter>
+        </receiver>
+
+        <!-- permission waiverList :: FileDragDropReceiver -->
+        <receiver android:name=".receiver.FileDragDropReceiver" >
+            <intent-filter>
+                <action android:name="com.lge.intent.action.DRAG_DROP" />
+
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.AuthFailReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.lge.intent.action.AUTH_FAIL_NOTI" />
+            </intent-filter>
+        </receiver>
+
+        <!-- regist LG Backup and Restore receiver -->
+
+        <receiver android:name="com.lge.email.ui.backup.GlobalBackupReceiver" >
+            <intent-filter>
+                <action android:name="com.lge.bnr.intent.action.REQUEST_com.lge.email" />
+                <action android:name="com.lge.bnr.intent.action.QUERY" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.lge.email.ui.backup.CMCCBackupReceiver" >
+            <intent-filter>
+                <action android:name="com.lge.bnr.intent.action.REQUEST_EMAIL_BACKUP" />
+                <action android:name="com.lge.bnr.intent.action.REQUEST_EMAIL_RESTORE" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // //
+  // // (LGEmail 3.0) listing here !!!  [END]
+  // //
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        -->
+
+
+        <!--
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // //
+  // // Old Activity & for under LGEmail 3.0 [START]
+  // //
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        -->
+
+
+        <!-- [2011.07.08][wooky][VZW:2164] -->
+        <!-- [2012.04.04][sh.park][TD:39311] MapView Search, when landscape Select text pop-up window -->
+        <activity
+            android:name=".customview.InsertMapView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_invitation_location_NORMAL" >
+        </activity>
+
+        <!-- LGE_CHANGE_START_Add Security Setting jihoon7.jung 120829 -->
+        <activity
+            android:name=".ui.settings.SecuritySettingFragment"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <!-- LGE_CHANGE_END_Add Security Setting jihoon7.jung 120829 -->
+
+
+        <!-- LG_HTML_COMPOSER_START seperate  map activity for htmlcomposer shivakumar.neginal@lge.com 29/10/2013 -->
+        <activity
+            android:name=".htmleditor.customview.InsertMapView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/sp_invitation_location_NORMAL" >
+        </activity>
+        <!-- LG_HTML_COMPOSER_END seperate  map activity for htmlcomposer -->
+        <!--
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // //
+  // // Old Activity & for under LGEmail 3.0 [END]
+  // //
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        -->
+
+
+        <!-- permission waiverList :: OmaEmnReceiver -->
+        <receiver
+            android:name=".receiver.OmaEmnReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="android.provider.Telephony.WAP_PUSH_RECEIVED" />
+
+                <data android:mimeType="text/vnd.wap.emn+xml" />
+                <data android:mimeType="application/vnd.wap.emn+wbxml" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".service.EmailService" >
+            <intent-filter>
+                <action android:name="com.lge.email.service.action.ILGEMAIL_SERVICE" />
+                <action android:name="com.lge.email.intent.action.MAIL_SERVICE_NOTI_CANCEL" />
+                <action android:name="com.lge.email.intent.action.ACCOUNT_CHECK" />
+                <action android:name="com.lge.email.intent.action.ACCOUNT" />
+            </intent-filter>
+        </service>
+
+        <!-- end now used service -->
+
+
+        <!-- LGSI_CHANGE_PROTOCOL_BEGIN santhosh/sayani 2013-12-05 added for Incoming Protocol Service -->
+        <service
+            android:name="com.lge.android.email.service.ImapService"
+            android:enabled="true"
+            android:permission="com.lge.email.permission.ACCESS_PROVIDER" >
+            <intent-filter>
+                <action android:name="com.lge.email.IMAP_INTENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.lge.android.email.service.Pop3Service"
+            android:enabled="true"
+            android:permission="com.lge.email.permission.ACCESS_PROVIDER" >
+            <intent-filter>
+                <action android:name="com.lge.email.POP3_INTENT" />
+            </intent-filter>
+        </service>
+
+        <!-- LGE_CHANGE_PROTOCOL_BEGIN minwoo.hong 2014-4-21 attachment download -->
+        <!--
+         <receiver
+            android:name="com.lge.email.service.AttachmentDownloadService$Watchdog"
+            android:enabled="true" />
+
+        <service
+            android:name="com.lge.email.service.AttachmentDownloadService"
+            android:enabled="true" >
+        </service>
+        -->
+        <!-- LGE_CHANGE_PROTOCOL_END minwoo.hong 2014-4-21 attachment download -->
+        <!-- LGSI_CHANGE_PROTOCOL_END santhosh/sayani 2013-12-05 added for Incoming Protocol Service -->
+
+
+        <!-- permission waiverList :: AccountAuthenticatorService -->
+        <service
+            android:name=".service.AccountAuthenticatorService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+        <!-- permission waiverList :: LGEmailAccountAuthenticatorService -->
+        <service
+            android:name=".service.LGEmailAccountAuthenticatorService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/lgemail_account_authenticator" />
+        </service>
+        <service
+            android:name=".jni.eas.ExchangeInterfaceService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.lge.email.jni.eas.IExchangeInterfaceService" />
+            </intent-filter>
+        </service>
+        <!-- LGSI_CHANGE_PROTOCOL_BEGIN santhosh 2013-11-06 added for AndroidEngine SyncAdapter -->
+        <!--
+        <service
+              android:name=".service.LGEmailAccountSyncAdapterService"
+              android:exported="true" >
+              <intent-filter>
+                  <action android:name="android.content.SyncAdapter" />
+              </intent-filter>
+              <meta-data
+                  android:name="android.content.SyncAdapter"
+                  android:resource="@xml/sync_email_account_other" />
+        </service>
+        -->
+        <!--
+      LGSI_CHANGE_PROTOCOL_START rabbani.shaik 20140415 : using LGEmailAccountAuthenticatorService
+      instead of PopImapAuthenticatorService or ImapAuthenticatorService(which are not required)
+        -->
+        <!-- Required stanza to register the PopImapAuthenticatorService with AccountManager -->
+        <!--
+        <service
+            android:name="com.android.email.service.Pop3AuthenticatorService"
+            android:exported="true"
+            android:enabled="true"
+            >
+            <intent-filter>
+                <action
+                    android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator_pop3"
+                />
+        </service>
+        -->
+        <!-- Required stanza to register the PopImapAuthenticatorService with AccountManager -->
+        <!--
+        <service
+            android:name="com.android.email.service.ImapAuthenticatorService"
+            android:exported="true"
+            android:enabled="false"
+            >
+            <intent-filter>
+                <action
+                    android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator_imap"
+                />
+        </service>
+        -->
+        <!--
+      LGSI_CHANGE_PROTOCOL_END rabbani.shaik 20140415 : using LGEmailAccountAuthenticatorService
+      instead of PopImapAuthenticatorService or ImapAuthenticatorService(which are not required)
+        -->
+
+        <service
+            android:name="com.lge.android.email.service.Pop3SyncAdapterService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_email_account_other" />
+        </service>
+        <!-- LGSI_CHANGE_PROTOCOL_END santhosh 2013-11-06 added for AndroidEngine SyncAdapter -->
+
+
+        <!-- [20110811][myungpyo,shim] : Receiver's worker service -->
+        <service
+            android:name=".service.ReceiverWorkerService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="ReceiverWorkerService" >
+            <intent-filter>
+                <action android:name="com.lge.intent.action.BROADCAST_UNREAD_COUNT" />
+            </intent-filter>
+        </service>
+
+        <!-- LGE_CHANGE_PROTOCOL_BEGIN minwoo.hong 2014-4-21 attachment download -->
+        <service
+            android:name="com.lge.email.service.AttachmentDownloadServiceEx"
+            android:enabled="true" >
+        </service>
+        <!-- LGE_CHANGE_PROTOCOL_END minwoo.hong 2014-4-21 attachment download -->
+        <service
+            android:name=".ui.mailwrite.EmailSendWorkerService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="EmailSendWorkerService" >
+            <intent-filter>
+                <action android:name="com.lge.intent.action.ACTION_SEND_REPLIED_EMAIL" />
+            </intent-filter>
+        </service>
+        <!-- start now used broadcast receiver -->
+        <receiver
+            android:name=".receiver.EmailBootReceiver"
+            android:enabled="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- [LLK_VZW][START] -->
+        <receiver android:name=".receiver.EmailSimChangedReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.SIM_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <!-- [LLK_VZW][END] -->
+
+
+        <!-- LGE_CHANGE_PROTOCOL_BEGIN sudhanshu.kumar 08AUG2014 clear data broadcast receiver from EAS and settings -->
+        <receiver android:name="com.lge.email.receiver.EmailDataCleanUpReceiver" >
+            <intent-filter>
+                <action android:name="com.android.settings.CLEARDATA" />
+                <action android:name="com.android.settings.CLEAR_DATA" />
+                <action android:name="com.lge.email.action.EAS_DEACTIVATE" />
+            </intent-filter>
+        </receiver>
+        <!-- LGE_CHANGE_PROTOCOL_END sudhanshu.kumar 08AUG2014 clear data broadcast receiver from EAS and settings -->
+        <!--
+            receiver
+            android:name="com.infraware.mail.EmailAccountModifyReceiver">
+            <intent-filter> <action
+            android:name="com.infraware.messaging.email.ACCOUNT_MODIFY"></action>
+            </intent-filter> </receiver
+        -->
+
+
+        <!-- [2011.07.18][KKYUN][VZW:2261] Support lock screen unread count -->
+        <!-- permission waiverList :: EmailUnreadCountReceiver -->
+        <receiver android:name=".receiver.EmailUnreadCountReceiver" >
+            <intent-filter>
+                <action android:name="com.android.intent.action.GET_UNREAD_COUNT" />
+            </intent-filter>
+        </receiver>
+
+        <!-- [2011.12.07][KKYUN] -->
+        <receiver android:name=".receiver.EmailMediaUnmountedReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_EJECT" />
+                <action android:name="android.intent.action.MEDIA_BAD_REMOVAL" />
+                <action android:name="android.intent.action.MEDIA_REMOVED" />
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+                <action android:name="android.intent.action.MEDIA_SHARED" />
+
+                <data android:scheme="file" />
+            </intent-filter>
+        </receiver>
+
+        <!-- [LeeGyuchang] 2010. 7. 15. for provisioning -->
+        <receiver
+            android:name=".service.EmailDevicePolicyReceiver"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_policy" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".service.EmailDevicePolicyReceiverNoSdCard"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_policy_no_sdcard" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".service.EmailDevicePolicyReceiverDPM"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_policy_dpm" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".service.EmailDevicePolicyReceiverUserAccount"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_policy_user_account" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".service.EmailDevicePolicyReceiverNoSdCardWifiOnly"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_policy_no_sdcard_wifi_only" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".service.EmailDevicePolicyReceiverWifiOnly"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_policy_wifi_only" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+        [jeehun.seo] 20130401 check storage
+        <receiver android:name=".receiver.StorageFullReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
+                <action android:name="android.intent.action.DEVICE_STORAGE_OK" />
+                <action android:name="android.intent.action.DEVICE_STORAGE_FULL" />
+                <action android:name="android.intent.action.DEVICE_STORAGE_NOT_FULL" />
+            </intent-filter>
+        </receiver>
+        -->
+        <!-- [policy-porting] 20120315 [start] -->
+        <permission
+            android:name="com.lge.email.permission.MDM_EMAIL_ACCOUNT"
+            android:protectionLevel="signatureOrSystem" />
+
+        <uses-permission android:name="com.lge.email.permission.MDM_EMAIL_ACCOUNT" />
+
+        <service android:name="com.lge.email.policy.mdm.MDMEmailService" />
+
+        <receiver
+            android:name="com.lge.email.policy.mdm.MDMConfigReceiver"
+            android:permission="com.lge.email.permission.MDM_EMAIL_ACCOUNT" >
+            <intent-filter>
+                <action android:name="com.lge.mdm.intent.action.EMAIL_ACCOUNT_CONFIG_CHANGED" />
+                <action android:name="com.lge.mdm.intent.action.EMAIL_CONSUMER_CHANGED" />
+                <action android:name="com.lge.mdm.intent.action.EMAIL_BLOCK_POPIMAP_CHANGED" />
+                <action android:name="com.lge.mdm.intent.action.EMAIL_MANUAL_SYNC_CHANGED" />
+                <action android:name="com.lge.mdm.intent.action.EMAIL_BLOCK_CONSUMER_LIST_CHANGED" />
+                <action android:name="com.lge.mdm.intent.action.PASSWORD_VISIBLE_POLICY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <!-- [policy-porting] 20120315 [end] -->
+        <activity
+            android:name=".policy.mdm.ConfigUpdateProgress"
+            android:configChanges="orientation|keyboardHidden|screenSize" >
+        </activity>
+        <!-- [policy-porting] sehyoung.kim-20120328 [end] -->
+
+        <activity
+            android:name=".ui.setupwizard.policy.EmailDevAdminController"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/application_name_common" >
+            <intent-filter>
+                <action android:name="com.lge.email.action.ENCRYPTION_POLICY_CHANGE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- [LeeGyuchang] 2010. 7. 15. END -->
+        <!-- end now used broadcast receiver -->
+
+        <activity
+            android:name=".policy.mdm.MDMConfigReceiver$MDMDeleteIMapPopAccount"
+            android:configChanges="orientation|keyboardHidden|screenSize" >
+        </activity>
+        <!-- LGSI_CHANGE_PROTOCOL_BEGIN santhosh 2013-11-11 Changed from mail to email -->
+        <!-- LGSI_CHANGE_PROTOCOL_BEGIN arunlal.sankarlal Modified the exported, for exchange to access -->
+        <provider
+            android:name="com.lge.email.providers.EmailProvider"
+            android:authorities="com.lge.email.provider"
+            android:exported="true"
+            android:label="@string/application_name_common"
+            android:multiprocess="false"
+            android:permission="com.lge.email.permission.ACCESS_PROVIDER" />
+        <!-- LGSI_CHANGE_PROTOCOL_END arunlal.sankarlal Modified the exported -->
+        <!-- LGSI_CHANGE_PROTOCOL_END santhosh 2013-11-11 Changed from main to email -->
+
+
+        <!-- [2013.10.23][LGSI_Protocol:vikas:commnetd this provider, as we will be using google provider EmailProvider] -->
+        <!-- [2012.06.30][NGHS Add ContentProvider] -->
+
+        <provider
+            android:name=".providers.LGEmailContentProvider"
+            android:authorities="com.lge.providers.lgemail"
+            android:exported="true"
+            android:label="@string/txt_Provider"
+            android:multiprocess="false"
+            android:permission="com.lge.email.permission.ACCESS_PROVIDER" />
+
+        <receiver android:name=".receiver.UpdateScheduleReceiver" >
+            <intent-filter>
+                <action android:name="com.lge.email.intent.action.MAIL_SERVICE_EAS_UPDATE_SCHEDULE" />
+                <action android:name="android.intent.action.TIME_TICK" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.DeleteEASReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.lge.email.action.EAS_DELETE" />
+                <action android:name="com.lge.email.action.CLEARDATA" />
+            </intent-filter>
+        </receiver>
+        <!-- LGSI_CHANGE_PROTOCOL_BEGIN vikas.madasheri 20131230 : registering provider for attachmentDownload uri -->
+        <provider
+            android:name="com.lge.email.providers.AttachmentProvider"
+            android:authorities="com.lge.email.attachmentprovider"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:permission="com.lge.email.permission.ACCESS_PROVIDER" />
+        <!-- LGSI_CHANGE_PROTOCOL_END vikas.madasheri 20131230 : registering provider for attachmentDownload uri -->
+
+
+        <!-- LGSI_CHANGE_PROTOCOL_BEGIN Santhosh/janagaraj 20140701 : registering provider for Large Body uri -->
+        <provider
+            android:name="com.lge.email.providers.BodyProvider"
+            android:authorities="com.lge.email.bodyprovider"
+            android:exported="true"
+            android:permission="com.lge.email.permission.ACCESS_PROVIDER" />
+        <!-- LGSI_CHANGE_PROTOCOL_END Santhosh/janagaraj 20140701 : registering provider for Large Body uri -->
+
+
+        <!-- [2012.03.28][jhoh] UpdateSchedule -->
+
+        <provider
+            android:name=".ui.largefile.DownloadProvider"
+            android:authorities="com.lge.email.downloads"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.snc.SncVerificationAccount"
+            android:configChanges="orientation|keyboardHidden|screenSize" >
+        </activity>
+        <!-- 06-09-2012 geomy.george@lge.com Added for Global Search [START] -->
+        <activity
+            android:name=".ui.search.MailGlobalSearchActivity"
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <!-- 06-09-2012 geomy.george@lge.com Added for Global Search [END] -->
+
+
+        <!-- [2011.10.25][Key store][sunghwa.woo] -->
+        <activity
+            android:name=".smime.io.SmimeCertInstallerMain"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Transparent" >
+        </activity>
+        <activity
+            android:name=".smime.io.SmimeCertFileList"
+            android:configChanges="orientation|keyboardHidden" >
+        </activity>
+        <activity
+            android:name=".smime.io.SmimeCertInstaller"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Transparent" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- EmailWidget Start - seungyeol.bak -->
+        <receiver
+            android:name=".ui.widget.EmailWidgetProvider"
+            android:excludeFromRecents="true"
+            android:label="@string/application_name_common" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.lge.sizechangable.email.intent.action.WIDGET_REFRESH_START" />
+                <action android:name="com.lge.email.intent.action.WIDGET_REFRESH_START" />
+                <action android:name="com.lge.email.intent.action.WIDGET_REFRESH_END" />
+                <action android:name="com.lge.email.intent.action.MAIL_REFRESH_END_SUCCESS" />
+                <action android:name="com.lge.email.intent.action.MAIL_REFRESH_END_FAIL" />
+                <action android:name="com.lge.sizechangable.email.large.action.LIST_VIEW" />
+                <action android:name="com.lge.sizechangable.email.large.action.WRITE" />
+                <action android:name="com.lge.sizechangable.email.large.action.NO_ACCOUNT" />
+                <!-- 10Dec14 shilpa.nc@lge.com EMAIL-9892 Removing unused Intent action[Start] -->
+                <!-- <action android:name="android.intent.action.DATE_CHANGED" /> -->
+                <!-- <action android:name="android.intent.action.BOOT_COMPLETED"/> -->
+                <!-- 10Dec14 shilpa.nc@lge.com EMAIL-9892 Removing unused Intent action[End] -->
+                <action android:name="android.intent.action.THEME_PACKAGE_CHANGED" />
+                <!-- Send Email List View Mode Change Event For Widget @youngmo.ban -->
+                <action android:name="com.lge.email.intent.action.EMAIL_LIST_VIEW_MODE_CHANGE" />
+                <!-- Clear Data For Widget @hee.yoon -->
+                <action android:name="com.android.settings.CLEARDATA" />
+                <action android:name="com.android.settings.CLEAR_DATA" />
+                <!-- [hee.yoon] 20131113 check sim changed in EmailWidget -->
+                <action android:name="android.intent.action.SIM_CHANGED_INFO" />
+                <action android:name="android.intent.action.SIM_STATE_CHANGED" />
+                <action android:name="com.lge.email.intent.action.WIDGET_SIM_REQUEST_OK" />
+                <action android:name="com.lge.email.action.MAILIST_WIDGET_UPDATE_ACTION" />
+                <action android:name="com.lge.email.action.MAILIST_WIDGET_UPDATE_ACTION_DONE"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/email_widget_info" />
+        </receiver>
+
+        <!-- permission waiverList :: SmsReceiver -->
+        <receiver android:name=".receiver.SmsReceiver" >
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".ui.widget.view.EmailViewService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name=".ui.widget.EmailViewManager" />
+        <!-- EmailWidget END - seungyeol.bak -->
+        <!-- [kyozzang.kim] 20120816 dont create floating activity when phone rotated -->
+        <activity
+            android:name="com.lge.email.ui.mailbox.FloatableMailboxActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:taskAffinity="com.lge.email.mailbox"
+            android:theme="@style/no_preview_activity" >
+        </activity>
+
+        <!-- LGE_CHANGE_PROTOCOL_BEGIN minwoo.hong 2014-5-16 check roaming -->
+        <service
+            android:name="com.lge.email.service.AccountService"
+            android:enabled="true"
+            android:permission="com.lge.email.permission.ACCESS_PROVIDER" >
+            <intent-filter>
+                <action android:name="com.lge.email.ACCOUNT_INTENT" />
+            </intent-filter>
+        </service>
+        <!-- LGE_CHANGE_PROTOCOL_END minwoo.hong 2014-5-16 check roaming -->
+
+        <receiver
+            android:name=".receiver.AutoRetrieveReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.lge.email.intent.action.ACTION_REFRESH" />
+            </intent-filter>
+        </receiver>
+
+        <!-- [Androidwear_Email][START] -->
+        <receiver
+            android:name=".receiver.EmailNotificationReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.lge.email.intent.action.NEW_EMAIL_DELETE" />
+                <action android:name="com.lge.email.intent.action.ACTION_VOICE_REPLY" />
+            </intent-filter>
+        </receiver>
+        <!-- [Androidwear_Email][END] -->
+
+
+        <!-- Floating App: floatable_email -->
+        <service android:name="com.lge.app.floating.FloatingWindowService" >
+        </service>
+
+        <uses-library
+            android:name="com.qualcomm.qcrilhook"
+            android:required="false" />
+        <uses-library
+            android:name="com.android.lge.lgsvcitems"
+            android:required="false" />
+        <uses-library
+            android:name="com.lge.app.floating"
+            android:required="false" />
+        <uses-library
+            android:name="com.lge.frameworks"
+            android:required="false" />
+        <uses-library
+            android:name="com.lge.mdm"
+            android:required="false" />
+        <uses-library
+            android:name="com.lge.systemservice.core"
+            android:required="false" />
+        <uses-library
+            android:name="com.lge.sui"
+            android:required="false" />
+        <uses-library
+            android:name="com.google.android.maps"
+            android:required="false" />
+
+        <activity
+            android:name="com.lge.email.htmleditor.richtextsignature.RichTextSignatureActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|keyboard|uiMode" >
+        </activity>
+
+        <!-- [rahul.meshram][27032014] EMAIL-5498, EMAIL-5916 UX requirement changed for Guide Tip dialog [Start] -->
+        <activity
+            android:name="com.lge.email.ui.mailbox.GuideDialog"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/guide_dialog_background_theme" />
+        <!-- [rahul.meshram][27032014] EMAIL-5498, EMAIL-5916 UX requirement changed for Guide Tip dialog [End] -->
+
+        <service
+            android:name=".service.AccountRegisterService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.lge.email.intent.action.REGISTER_ACCOUNT_OUTERAPP" />
+                <action android:name="com.lge.email.intent.action.MAIL_SERVICE_CP" />
+                <action android:name="com.lge.email.intent.action.MAIL_SERVICE_EMN" />
+
+                <!-- [RETAIL_MODE_EMAIL][START] -->
+                <action android:name="com.lge.email.action.RETAIL_MODE_ADD_ACCOUNT" />
+                <action android:name="com.lge.email.action.RETAIL_MODE_REMOVE_ACCOUNT" />
+                <!-- [RETAIL_MODE_EMAIL][END] -->
+            </intent-filter>
+        </service>
+
+        <!-- LGSI_CHANGE_PROTOCOL_BEGIN Santhosh/Minwoo 20140707 : Fixed permission problem for Exchange -->
+        <provider
+            android:name=".providers.CommonAttachmentProvider"
+            android:authorities="com.lge.email.common.attachment"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:permission="com.lge.email.permission.ACCESS_PROVIDER" >
+        </provider>
+        <!-- LGSI_CHANGE_PROTOCOL_END Santhosh/Minwoo 20140707 : Fixed permission problem for Exchange -->
+
+        <service
+            android:name=".service.WatchDeviceService"
+            android:exported="true"
+            android:permission="com.lge.email.permission.READ_EMAIL_ACCOUNT_INFO" >
+            <intent-filter>
+                <action android:name="com.lge.email.intent.action.GET_ACCOUNT_LIST" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name=".providers.BackupSizeUpdateProvider"
+            android:authorities="com.lge.email.BackupSizeUpdateProvider"
+            android:exported="true"
+            android:permission="com.lge.email.permission.ACCESS_PROVIDER" >
+        </provider>
+    </application>
+    <!-- start now used permission -->
+    <!-- [jeehun.seo] 20131112 db corruption exception code [start] -->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <!-- [jeehun.seo] 20131112 db corruption exception code [end] -->
+
+
+    <!-- LGSI_CHANGE_PROTOCOL_BEGIN vikas.madasheri 20131230 : permissions for attachment files -->
+    <!-- Grant permission to other apps to view attachments -->
+    <!-- STOPSHIP: protectionLevel should not be dangerous -->
+    <permission
+        android:name="com.lge.email.permission.READ_ATTACHMENT"
+        android:protectionLevel="signature" />
+    <!-- Grant permission to system apps to access provider (see provider below) -->
+
+    <uses-permission android:name="com.lge.email.permission.ACCESS_PROVIDER" />
+    <uses-permission android:name="com.lge.email.permission.READ_ATTACHMENT" />
+    <!-- LGSI_CHANGE_PROTOCOL_END vikas.madasheri 20131230 : permissions for attachment files -->
+    <!-- [2014.03.17][hongjin.kim][start]add for script write -->
+    <uses-permission android:name="com.qualcomm.permission.USE_QCRIL_MSG_TUNNEL" />
+    <!-- [2014.03.17][hongjin.kim][end]add for script write -->
+
+
+    <!-- start now used permission -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_LGDRM" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH" />
+    <uses-permission android:name="com.lge.sns.READ_SN_MANAGER" />
+    <uses-permission android:name="com.lge.sns.WRITE_SN_MANAGER" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <!--
+    LGSI_CHANGE_PROTOCOL sudhanshu.kumar 12JUN2014:
+    added permission for write to removable SD card
+    -->
+    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" /> -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.MOUNT_FORMAT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- Large file transfer -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- <uses-permission android:name="android.permission.MASTER_CLEAR" /> -->
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <!-- <uses-permission android:name="android.permission.CALL_PRIVILEGED" /> -->
+    <uses-permission android:name="android.permission.VIDEO_CALL_PRIVILEGED" />
+    <uses-permission android:name="com.google.android.gm.perm" />
+    <uses-permission android:name="com.google.android.gm.permission.READ_GMAIL" />
+    <uses-permission android:name="com.lge.ACCESS_SNC_ACCOUNT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.gm.permission.READ_GMAIL" />
+    <uses-permission android:name="com.google.android.gm.permission.WRITE_GMAIL" />
+    <uses-permission android:name="com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />
+    <!-- [2011.07.22][wooky][VZW:2266] -->
+    <!-- <uses-permission android:name="android.permission.REBOOT" /> -->
+    <!-- Grant permission to system apps to access provider (see provider below) -->
+    <!--
+    <permission android:name="com.lge.email.permission.WRITE_EMAIL"
+                android:protectionLevel="signatureOrSystem"
+                android:label="@string/sp_perm_write_email_mgr_NORMAL"
+                android:description="@string/sp_permdesc_write_email_NORMAL"/>
+    <permission android:name="com.lge.email.permission.READ_EMAIL"
+                android:protectionLevel="signatureOrSystem"
+                android:label="@string/sp_perm_read_email_mgr_NORMAL"
+                android:description="@string/sp_permdesc_write_email_NORMAL"/>
+    <uses-permission android:name="com.lge.email.permission.WRITE_EMAIL"/>
+    <uses-permission android:name="com.lge.email.permission.READ_EMAIL"/>
+    -->
+    <!-- [2011.08.02][minho_ahn]: Allow BT for EAS policy -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+
+    <!-- [2011.09.13][KKYUN] MailList - startGetUsageThread - getPackageSizeInfo -->
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
+    <!-- [2012.02.15][Codeveloper] Using SNC GetToken Provider -->
+    <uses-permission android:name="com.lge.snc.permission.ACCESS_PROVIDER" />
+
+    <!-- 2012.03.25 km.sa encryption -->
+    <uses-permission android:name="android.permission.CRYPT_KEEPER" />
+
+    <!-- LGE_CHANGE_SMS_SYNC_BEGIN bill23.kim -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <!-- LGE_CHANGE_SMS_SYNC_END bill23.kim -->
+
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <!-- Floating App: floatable_email -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- <uses-permission android:name="android.permission.STOP_APP_SWITCHES" /> -->
+
+
+    <!-- [kyozzang.kim] 20130610 task app request item -->
+    <uses-permission android:name="com.lge.task.database.TasksProvider.permission.DB_READ" />
+    <uses-permission android:name="com.lge.task.database.TasksProvider.permission.DB_WRITE" />
+    <!-- [kyozzang.kim] 20130610 task app request item -->
+
+
+    <!-- // sehyoung.kim@lge.com. app_path_a_project -->
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+
+    <!-- [2013.11.14][hongjin.kim][start] add for Guest mode notification issue. -->
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <!-- [2013.11.14][hongjin.kim][end] add for Guest mode notification issue. -->
+
+
+    <!-- LGSI_CHANGE_PROTOCOL_BEGIN arunlal.sankarlal Added permission to access Exchange provider -->
+    <uses-permission android:name="com.lge.exchange.permission.ACCESS_PROVIDER" />
+    <!-- LGSI_CHANGE_PROTOCOL_END arunlal.sankarlal Added permission to access Exchange's provider -->
+
+
+    <!-- [LLK_VZW][START] -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!-- [LLK_VZW][END] -->
+    <!-- EMAIL-6181 : Support NFC Tag Reading : START -->
+    <uses-permission android:name="android.permission.NFC" />
+    <!-- END -->
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
+</manifest>

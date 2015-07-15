@@ -1,37 +1,33 @@
 package com.lge.lai.parser;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.lge.lai.common.db.dao.DAOProperties;
 import com.lge.lai.parser.manifest.ManifestParser;
 import com.lge.lai.parser.report.Report;
 import com.lge.lai.parser.report.ReportFactory;
 
 public class Main {
+	private static final String PROPERTY_KEY = "LGAppIF.parser";
+	private static final String PROPERTY_REPORT_OPT = "report";
+	private static final String PROPERTY_WRITEDB_OPT = "write.db";
+	
+	private static final String OPTIONS_PATH = "p";
+	private static final String OPTIONS_INCLUDE_ANDROID_JAR = "include_android_jar";
+	
     public static Launcher launcher = new Launcher();
 
     public static void main(String[] args) throws ParseException {
-        Options options = new Options();
-        options.addOption("p", "path", true, "project directory path");
-
-        CommandLine command = new DefaultParser().parse(options, args);
-        if (!command.hasOption("p")) {
-            showHelp(options);
-            System.exit(-1);
-        }
-
-        String path = command.getOptionValue("p");
-        String[] tokens = path.split(getSeperatorForRegex());
-        String name = tokens[tokens.length - 1];
-
-        ParserProperties properties = new ParserProperties("LGAppIF.parser");
-        String reportType = properties.getProperty("report", true);
-        boolean writeDB = Boolean.valueOf(properties.getProperty("write.db", true));
+    	ParserProperties properties = new ParserProperties(PROPERTY_KEY);
+    	ParserOptions options = new ParserOptions(args);
+    	
+    	String reportType = properties.getProperty(PROPERTY_REPORT_OPT, true);
+    	boolean writeDB = Boolean.valueOf(properties.getProperty(PROPERTY_WRITEDB_OPT, true));
+    	String path = options.getOption(OPTIONS_PATH);
+    	boolean includeAndroidJar = options.hasOption(OPTIONS_INCLUDE_ANDROID_JAR);
+    			
+    	String[] tokens = path.split(getSeperatorForRegex());
+    	String name = tokens[tokens.length - 1];
 
         Report report = ReportFactory.create(reportType, name);
         ManifestParser manifestParser = new ManifestParser(report, writeDB);
@@ -50,11 +46,5 @@ public class Main {
         } else {
             return "/";
         }
-    }
-
-    private static void showHelp(Options options) {
-        HelpFormatter formatter = new HelpFormatter();
-        formatter.setWidth(50);
-        formatter.printHelp("java -jar LGAppInterfaceParser.jar", options);
     }
 }

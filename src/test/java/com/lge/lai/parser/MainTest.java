@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class MainTest {
@@ -17,6 +18,7 @@ public class MainTest {
     }
 
     @Test
+    @Ignore
     public void run() throws ParseException {
         String[] args = new String[] { "-p", PACKAGE_PATH };
         Main.main(args);

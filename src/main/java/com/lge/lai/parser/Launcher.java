@@ -4,10 +4,11 @@ import com.lge.lai.parser.manifest.ManifestParser;
 import com.lge.lai.parser.util.FileWalker;
 
 public class Launcher {
+	private static final String XML = "xml";
     private static final String ANDROID_MANIFEST = "AndroidManifest.xml";
 
     public void run(String path, ManifestParser parser) {
-        FileWalker xml = new FileWalker(path, new String[] { "xml" });
+        FileWalker xml = new FileWalker(path, new String[] { XML });
         for (String file : xml.getFilePathList()) {
             if (file.endsWith(ANDROID_MANIFEST) && !ignoresManifest(file)) {
                 try {

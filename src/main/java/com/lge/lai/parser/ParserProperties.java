@@ -25,7 +25,7 @@ public class ParserProperties {
         this.specificKey = specificKey;
     }
 
-    public String getProperty(String key, boolean mandatory) {
+	public String getProperty(String key, boolean mandatory) {
         String fullKey = specificKey + "." + key;
         String property = PROPERTIES.getProperty(fullKey);
 

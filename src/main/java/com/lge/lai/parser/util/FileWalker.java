@@ -4,7 +4,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.lge.lai.parser.source.ActionNameVisitor;
+
 public class FileWalker {
+    static Logger LOGGER = LogManager.getLogger(FileWalker.class.getName());
+    
     private String path;
     private int fileCount = 0;
     private int dirCount = 0;
@@ -46,7 +53,7 @@ public class FileWalker {
     private boolean matchesWithExtension(File file) {
         for (String ext : extensions) {
             if (file.getName().endsWith(ext)) {
-                System.out.println("[" + ext + "] " + file.getAbsoluteFile());
+                LOGGER.info("[" + ext + "] " + file.getAbsolutePath());
                 return true;
             }
         }

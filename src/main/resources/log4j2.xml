@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="lai-parser-lib" packages="">
+	<Properties>
+		<Property name="log-path">logs</Property>
+	</Properties>
+	<Appenders>
+		<Console name="console-parser-log" target="SYSTEM_OUT">
+		    <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%c{1}/%M] - %msg%n" />
+		</Console>
+		<RollingFile name="trace-parser-log" fileName="${log-path}/log-parser-trace.log"
+		    filePattern="${log-path}/log-parser-trace-%d{yyyy-MM-dd}.log">
+		    <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss} %c{1} - %msg%n" />
+		    <Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+				<SizeBasedTriggeringPolicy size="50 MB" />
+			   </Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="jungho" level="trace" additivity="false">
+		    <appender-ref ref="trace-parser-log" level="trace" />
+			<appender-ref ref="console-parser-log" level="trace" />
+		</Logger>
+		<Root level="trace" additivity="false">
+			<AppenderRef ref="trace-parser-log" />
+			<AppenderRef ref="console-parser-log" />
+		</Root>
+	</Loggers>
+</Configuration>

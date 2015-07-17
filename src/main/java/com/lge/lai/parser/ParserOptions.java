@@ -15,6 +15,10 @@ public class ParserOptions {
 		options.addOption("include_android_jar", "include_android_jar", false, "includes android.jar as extra library");
 		try {
 			command = new DefaultParser().parse(options, args);
+			if (!command.hasOption("p")) {
+			    showHelp(options);
+			    throw new RuntimeException();
+			}
 		} catch (ParseException e) {
 			showHelp(options);
 			throw new RuntimeException();
@@ -32,7 +36,7 @@ public class ParserOptions {
 	
 	private void showHelp(Options options) {
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.setWidth(50);
+		formatter.setWidth(100);
 		formatter.printHelp("java -jar lai-parser-lib.jar", options);
 	}
 }

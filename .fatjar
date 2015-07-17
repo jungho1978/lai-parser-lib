@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Fri Jul 17 17:26:47 KST 2015
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=lai-parser-lib_fat.jar
+manifest.mergeall=false
+manifest.mainclass=com.lge.lai.parser.Main
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<po|lai-parser-lib>~android.jar;<po|lai-parser-lib>~AndroidManifest.xml;<jar|guava-18.0.jar>;<jar|log4j-api-2.3.jar>;<jar|log4j-core-2.3.jar>;<jar|android.jar>;<jar|junit.jar>;<jar|org.hamcrest.core_1.3.0.v201303031735.jar>;<jar|android-all-4.4_r1-robolectric-1.jar>
+includes=

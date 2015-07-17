@@ -1,14 +1,14 @@
 #Fat Jar Configuration File
-#Wed Jul 15 14:51:45 KST 2015
-onejar.license.required=true
+#Fri Jul 17 17:44:57 KST 2015
+onejar.license.required=false
 manifest.classpath=
 manifest.removesigners=true
 onejar.checkbox=false
 jarname=lai-parser-lib_fat.jar
-manifest.mergeall=true
+manifest.mergeall=false
 manifest.mainclass=com.lge.lai.parser.Main
 manifest.file=<createnew>
 jarname.isextern=false
 onejar.expand=
-excludes=<jar|junit.jar>;<jar|org.hamcrest.core_1.3.0.v201303031735.jar>
+excludes=<po|lai-parser-lib>~com/~lge/~lai/~test/;<po|lai-parser-lib>~android.jar;<po|lai-parser-lib>~AndroidManifest.xml;<jar|guava-18.0.jar>;<jar|log4j-api-2.3.jar>;<jar|log4j-core-2.3.jar>;<jar|android.jar>;<jar|junit.jar>;<jar|org.hamcrest.core_1.3.0.v201303031735.jar>
 includes=

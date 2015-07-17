@@ -6,6 +6,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.lge.lai.parser.manifest.ManifestParser;
 import com.lge.lai.parser.report.Report;
 import com.lge.lai.parser.report.ReportFactory;
+import com.lge.lai.parser.source.SourceParser;
 
 public class Main {
 	private static final String PROPERTY_KEY = "LGAppIF.parser";
@@ -30,9 +31,8 @@ public class Main {
     	String name = tokens[tokens.length - 1];
 
         Report report = ReportFactory.create(reportType, name);
-        ManifestParser manifestParser = new ManifestParser(report, writeDB);
-
-        launcher.run(path, manifestParser);
+        launcher.run(path, new ManifestParser(report, writeDB));
+        launcher.run(path, new SourceParser(report, writeDB));
     }
 
     @VisibleForTesting

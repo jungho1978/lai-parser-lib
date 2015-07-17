@@ -14,8 +14,14 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.HashMultimap;
 import com.lge.lai.common.data.Feature;
-import com.lge.lai.parser.constants.ManifestAttr;
+import com.lge.lai.parser.constants.Manifest;
+import com.lge.lai.parser.data.ActionData;
+import com.lge.lai.parser.data.IntentMethodData;
+import com.lge.lai.parser.manifest.ManifestParser;
+import com.lge.lai.parser.source.ActionNameVisitor;
+import com.lge.lai.parser.source.IntentMethodVisitor;
 
 public class ExcelReport implements Report {
     private String name;
@@ -24,15 +30,26 @@ public class ExcelReport implements Report {
     private HSSFWorkbook workbook;
     private HSSFSheet sheet;
 
-    private final static String[] ACTION_NAME_COL = new String[] { "Package", "Class",
-            "Declaration type", "Line number", "Action name", "Resolved" };
-    private final static String[] PASSING_INTENT_METHOD_COL = new String[] { "Package", "Class",
-            "Line number", "Method name", "Resvoled" };
     private final static String[] MANIFEST_PROVIDER_COL = new String[] { "Type", "Component name",
             "Authorities", "Read permission", "Write permission" };
     private final static String[] MANIFEST_COMMON_COL = new String[] { "Action", "Type",
             "Component name", "Category", "Data (Scheme)", "Data (Host)", "Data (Port)",
             "Data (Path)", "Data (Pattern)", "Data (Prefix)", "Data (Mime)" };
+    private final static String[] ACTION_LIST_COL = new String[] { "Package", "Class",
+            "Declaration type", "Line number", "Action name", "Resolved" };
+    private final static String[] INTENT_HANDLING_METHOD_COL = new String[] { "Package", "Class",
+            "Line number", "Method name", "Resvoled" };
+
+    private final static Map<String, String[]> CATEGORY_COL_TABLE = new HashMap<>();
+    static {
+        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.ACTIVITY, MANIFEST_COMMON_COL);
+        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.ACTIVITY_ALIAS, MANIFEST_COMMON_COL);
+        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.RECEIVER, MANIFEST_COMMON_COL);
+        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.SERVICE, MANIFEST_COMMON_COL);
+        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.PROVIDER, MANIFEST_PROVIDER_COL);
+        CATEGORY_COL_TABLE.put(ActionNameVisitor.CATEGORY, ACTION_LIST_COL);
+        CATEGORY_COL_TABLE.put(IntentMethodVisitor.CATEGORY, INTENT_HANDLING_METHOD_COL);
+    }
 
     public ExcelReport(String name) {
         this.name = name;
@@ -64,13 +81,7 @@ public class ExcelReport implements Report {
 
     private void createColumnTitleCell(HSSFSheet sheet, String category) {
         HSSFRow row = sheet.createRow(0);
-        String[] columnType = new String[] {};
-        if (category.equalsIgnoreCase(ManifestAttr.PROVIDER)) {
-            columnType = MANIFEST_PROVIDER_COL;
-        } else {
-            columnType = MANIFEST_COMMON_COL;
-        }
-
+        String[] columnType = CATEGORY_COL_TABLE.get(category);
         for (int i = 0; i < columnType.length; i++) {
             row.createCell(i).setCellValue(columnType[i]);
             row.getCell(i).setCellStyle(getCellStyle());
@@ -87,30 +98,81 @@ public class ExcelReport implements Report {
     @Override
     public void setData(String category, Object obj) throws Exception {
         HSSFRow row = createRow(category);
-        String[] columnType = new String[] {};
-        Feature feature = (Feature)obj;
-        if (category.equalsIgnoreCase(ManifestAttr.PROVIDER)) {
-            row.createCell(0).setCellValue(feature.type);
-            row.createCell(1).setCellValue(feature.className);
-            row.createCell(2).setCellValue(feature.authorities);
-            row.createCell(3).setCellValue(feature.readPermission);
-            row.createCell(4).setCellValue(feature.writePermission);
-            columnType = MANIFEST_PROVIDER_COL;
+        String[] columnType = CATEGORY_COL_TABLE.get(category);
+        if (category.startsWith(ManifestParser.CATEGORY)) {
+            Feature feature = (Feature)obj;
+            if (category.contains(Manifest.PROVIDER)) {
+                setProviderDataToCell(row, feature, columnType);
+            } else {
+                setASBDataToCell(row, feature, columnType);
+            }
         } else {
-            row.createCell(0).setCellValue(feature.actionName);
-            row.createCell(1).setCellValue(feature.type);
-            row.createCell(2).setCellValue(feature.className);
-            row.createCell(3).setCellValue(feature.getCategories());
-            row.createCell(4).setCellValue(feature.getSchemes());
-            row.createCell(5).setCellValue(feature.getHosts());
-            row.createCell(6).setCellValue(feature.getPorts());
-            row.createCell(7).setCellValue(feature.getPaths());
-            row.createCell(8).setCellValue(feature.getPathPatterns());
-            row.createCell(9).setCellValue(feature.getPathPrefixes());
-            row.createCell(10).setCellValue(feature.getMimeTypes());
-            columnType = MANIFEST_COMMON_COL;
+            if (category.equalsIgnoreCase(ActionNameVisitor.CATEGORY)) {
+                ActionData action = (ActionData)obj;
+                setActionDataToCell(row, action, columnType);
+            } else if (category.equalsIgnoreCase(IntentMethodVisitor.CATEGORY)) {
+                IntentMethodData method = (IntentMethodData)obj;
+                setIntentMethodDataToCell(row, method, columnType);
+            }
         }
-
+    }
+    
+    private void setProviderDataToCell(HSSFRow row, Feature feature, String[] columnType) {
+        row.createCell(0).setCellValue(feature.type);
+        row.createCell(1).setCellValue(feature.className);
+        row.createCell(2).setCellValue(feature.authorities);
+        row.createCell(3).setCellValue(feature.readPermission);
+        row.createCell(4).setCellValue(feature.writePermission);
+        
+        for (int i = 0; i < columnType.length; i++) {
+            row.getCell(i).setCellStyle(getCellStyle());
+            sheet.autoSizeColumn(i);
+        }
+        write();
+    }
+    
+    private void setASBDataToCell(HSSFRow row, Feature feature, String[] columnType) {
+        row.createCell(0).setCellValue(feature.actionName);
+        row.createCell(1).setCellValue(feature.type);
+        row.createCell(2).setCellValue(feature.className);
+        row.createCell(3).setCellValue(feature.getCategories());
+        row.createCell(4).setCellValue(feature.getSchemes());
+        row.createCell(5).setCellValue(feature.getHosts());
+        row.createCell(6).setCellValue(feature.getPorts());
+        row.createCell(7).setCellValue(feature.getPaths());
+        row.createCell(8).setCellValue(feature.getPathPatterns());
+        row.createCell(9).setCellValue(feature.getPathPrefixes());
+        row.createCell(10).setCellValue(feature.getMimeTypes());
+        
+        for (int i = 0; i < columnType.length; i++) {
+            row.getCell(i).setCellStyle(getCellStyle());
+            sheet.autoSizeColumn(i);
+        }
+        write();
+    }
+    
+    private void setActionDataToCell(HSSFRow row, ActionData action, String[] columnType) {
+        row.createCell(0).setCellValue(action.packageName);
+        row.createCell(1).setCellValue(action.className);
+        row.createCell(2).setCellValue(action.declarationType);
+        row.createCell(3).setCellValue(action.lineNumber);
+        row.createCell(4).setCellValue(action.actionName);
+        row.createCell(5).setCellValue(action.isResolved);
+        
+        for (int i = 0; i < columnType.length; i++) {
+            row.getCell(i).setCellStyle(getCellStyle());
+            sheet.autoSizeColumn(i);
+        }
+        write();
+    }
+    
+    private void setIntentMethodDataToCell(HSSFRow row, IntentMethodData method, String[] columnType) {
+        row.createCell(0).setCellValue(method.packageName);
+        row.createCell(1).setCellValue(method.className);
+        row.createCell(2).setCellValue(method.lineNumber);
+        row.createCell(3).setCellValue(method.methodName);
+        row.createCell(4).setCellValue(method.isResolved);
+        
         for (int i = 0; i < columnType.length; i++) {
             row.getCell(i).setCellStyle(getCellStyle());
             sheet.autoSizeColumn(i);
@@ -128,9 +190,13 @@ public class ExcelReport implements Report {
         return sheet.createRow(index + 1);
     }
 
-    private void write() throws Exception {
-        OutputStream os = new FileOutputStream(name + ".xls");
-        workbook.write(os);
+    private void write() {
+        try {
+            OutputStream os = new FileOutputStream(name + ".xls");
+            workbook.write(os);
+        } catch (Exception e) {
+            
+        }
     }
 
     @VisibleForTesting

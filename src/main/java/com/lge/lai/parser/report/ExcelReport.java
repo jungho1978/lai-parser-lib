@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -22,8 +24,10 @@ import com.lge.lai.parser.data.IntentMethodData;
 import com.lge.lai.parser.manifest.ManifestParser;
 import com.lge.lai.parser.source.ActionNameVisitor;
 import com.lge.lai.parser.source.IntentMethodVisitor;
+import com.lge.lai.parser.source.SourceParser;
 
 public class ExcelReport implements Report {
+    static Logger LOGGER = LogManager.getLogger(ExcelReport.class.getName());
     private String name;
     private Map<String, Integer> categories = new HashMap<String, Integer>();
 
@@ -78,7 +82,9 @@ public class ExcelReport implements Report {
 
     @Override
     public void addCategory(String category) {
-        categories.put(category, 0);
+        if (!categories.containsKey(category)) {
+            categories.put(category, 0);
+        }
         sheet = workbook.getSheet(category);
         if (sheet == null) {
             sheet = workbook.createSheet(category);

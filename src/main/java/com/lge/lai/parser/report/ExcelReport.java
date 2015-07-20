@@ -29,6 +29,7 @@ public class ExcelReport implements Report {
 
     private HSSFWorkbook workbook;
     private HSSFSheet sheet;
+    private static HSSFCellStyle cs;
 
     private final static String[] MANIFEST_PROVIDER_COL = new String[] { "Type", "Component name",
             "Authorities", "Read permission", "Write permission" };
@@ -42,11 +43,16 @@ public class ExcelReport implements Report {
 
     private final static Map<String, String[]> CATEGORY_COL_TABLE = new HashMap<>();
     static {
-        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.ACTIVITY, MANIFEST_COMMON_COL);
-        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.ACTIVITY_ALIAS, MANIFEST_COMMON_COL);
-        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.RECEIVER, MANIFEST_COMMON_COL);
-        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.SERVICE, MANIFEST_COMMON_COL);
-        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.PROVIDER, MANIFEST_PROVIDER_COL);
+        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.ACTIVITY,
+                MANIFEST_COMMON_COL);
+        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.ACTIVITY_ALIAS,
+                MANIFEST_COMMON_COL);
+        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.RECEIVER,
+                MANIFEST_COMMON_COL);
+        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.SERVICE,
+                MANIFEST_COMMON_COL);
+        CATEGORY_COL_TABLE.put(ManifestParser.CATEGORY_PREFIX + Manifest.PROVIDER,
+                MANIFEST_PROVIDER_COL);
         CATEGORY_COL_TABLE.put(ActionNameVisitor.CATEGORY, ACTION_LIST_COL);
         CATEGORY_COL_TABLE.put(IntentMethodVisitor.CATEGORY, INTENT_HANDLING_METHOD_COL);
     }
@@ -67,6 +73,7 @@ public class ExcelReport implements Report {
             }
         }
         workbook = new HSSFWorkbook();
+        cs = getCellStyle();
     }
 
     @Override
@@ -84,7 +91,7 @@ public class ExcelReport implements Report {
         String[] columnType = CATEGORY_COL_TABLE.get(category);
         for (int i = 0; i < columnType.length; i++) {
             row.createCell(i).setCellValue(columnType[i]);
-            row.getCell(i).setCellStyle(getCellStyle());
+            row.getCell(i).setCellStyle(cs);
         }
     }
 
@@ -116,21 +123,21 @@ public class ExcelReport implements Report {
             }
         }
     }
-    
+
     private void setProviderDataToCell(HSSFRow row, Feature feature, String[] columnType) {
         row.createCell(0).setCellValue(feature.type);
         row.createCell(1).setCellValue(feature.className);
         row.createCell(2).setCellValue(feature.authorities);
         row.createCell(3).setCellValue(feature.readPermission);
         row.createCell(4).setCellValue(feature.writePermission);
-        
+
         for (int i = 0; i < columnType.length; i++) {
-            row.getCell(i).setCellStyle(getCellStyle());
+            row.getCell(i).setCellStyle(cs);
             sheet.autoSizeColumn(i);
         }
         write();
     }
-    
+
     private void setASBDataToCell(HSSFRow row, Feature feature, String[] columnType) {
         row.createCell(0).setCellValue(feature.actionName);
         row.createCell(1).setCellValue(feature.type);
@@ -143,14 +150,14 @@ public class ExcelReport implements Report {
         row.createCell(8).setCellValue(feature.getPathPatterns());
         row.createCell(9).setCellValue(feature.getPathPrefixes());
         row.createCell(10).setCellValue(feature.getMimeTypes());
-        
+
         for (int i = 0; i < columnType.length; i++) {
-            row.getCell(i).setCellStyle(getCellStyle());
+            row.getCell(i).setCellStyle(cs);
             sheet.autoSizeColumn(i);
         }
         write();
     }
-    
+
     private void setActionDataToCell(HSSFRow row, ActionData action, String[] columnType) {
         row.createCell(0).setCellValue(action.packageName);
         row.createCell(1).setCellValue(action.className);
@@ -158,23 +165,23 @@ public class ExcelReport implements Report {
         row.createCell(3).setCellValue(action.lineNumber);
         row.createCell(4).setCellValue(action.actionName);
         row.createCell(5).setCellValue(action.isResolved);
-        
+
         for (int i = 0; i < columnType.length; i++) {
-            row.getCell(i).setCellStyle(getCellStyle());
+            row.getCell(i).setCellStyle(cs);
             sheet.autoSizeColumn(i);
         }
         write();
     }
-    
+
     private void setIntentMethodDataToCell(HSSFRow row, IntentMethodData method, String[] columnType) {
         row.createCell(0).setCellValue(method.packageName);
         row.createCell(1).setCellValue(method.className);
         row.createCell(2).setCellValue(method.lineNumber);
         row.createCell(3).setCellValue(method.methodName);
         row.createCell(4).setCellValue(method.isResolved);
-        
+
         for (int i = 0; i < columnType.length; i++) {
-            row.getCell(i).setCellStyle(getCellStyle());
+            row.getCell(i).setCellStyle(cs);
             sheet.autoSizeColumn(i);
         }
         write();
@@ -195,7 +202,7 @@ public class ExcelReport implements Report {
             OutputStream os = new FileOutputStream(name + ".xls");
             workbook.write(os);
         } catch (Exception e) {
-            
+
         }
     }
 
